@@ -2,19 +2,21 @@ import express, { Application, Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 
-const app: Application = express();
-app.use(express.json());
-
 const dbPath = path.join(__dirname, "../db/todo.json");
 
+const app: Application = express();
+const todosRouter = express.Router();
+
+app.use(express.json());
+app.use("/", todosRouter);
 // Root route
-app.get("/", (req: Request, res: Response) => {
+todosRouter.get("/", (req: Request, res: Response) => {
   console.log(req, res);
   res.send("Welcome to Todos app made with express js and typescript!");
 });
 
 //Get all todos
-app.get("/todos", (req: Request, res: Response) => {
+todosRouter.get("/todos", (req: Request, res: Response) => {
   const data = fs.readFileSync(dbPath, { encoding: "utf-8" });
   //   console.log(data);
   res.json({ data, message: "All todos here!" });
@@ -22,7 +24,7 @@ app.get("/todos", (req: Request, res: Response) => {
 });
 
 // Get single todo
-app.get("/todo", (req: Request, res: Response) => {
+todosRouter.get("/todo", (req: Request, res: Response) => {
   const data = fs.readFileSync(dbPath, { encoding: "utf-8" });
   console.log(req.query);
   //   console.log(data);
@@ -31,7 +33,7 @@ app.get("/todo", (req: Request, res: Response) => {
 });
 
 //create a todo
-app.post("/todos/create", (req: Request, res: Response) => {
+todosRouter.post("/todos/create", (req: Request, res: Response) => {
   const data = req.body;
   console.log(data);
   res.send("Hello World!");
