@@ -13,9 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
+const mongodb_1 = require("./config/mongodb");
 let server;
 const port = 5000;
 const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
+    // Connect the client to the server	(optional starting in v4.7)
+    yield mongodb_1.client.connect();
+    // Send a ping to confirm a successful connection
+    yield mongodb_1.client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
     server = app_1.default.listen(port, () => {
         console.log(`Example app listening on port ${port}`);
     });

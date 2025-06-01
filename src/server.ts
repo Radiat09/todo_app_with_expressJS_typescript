@@ -1,9 +1,15 @@
 import app from "./app";
+import { client } from "./config/mongodb";
 
 let server;
 const port = 5000;
 
 const bootstrap = async () => {
+  // Connect the client to the server	(optional starting in v4.7)
+  await client.connect();
+  // Send a ping to confirm a successful connection
+  await client.db("admin").command({ ping: 1 });
+  console.log("Pinged your deployment. You successfully connected to MongoDB!");
   server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
   });
